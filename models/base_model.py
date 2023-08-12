@@ -5,9 +5,8 @@
 from uuid import uuid4
 from datetime import datetime
 from sys import path
-from models import storage
 path.append('.')
-
+from models import storage
 
 class BaseModel:
     """ Defines the base model class"""
