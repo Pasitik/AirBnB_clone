@@ -2,6 +2,7 @@
 """Defines the User class."""
 from models.base_model import BaseModel
 
+
 class User(BaseModel):
     """Represent a User.
     Attributes:
@@ -10,8 +11,6 @@ class User(BaseModel):
         first_name (str): The first name of the user.
         last_name (str): The last name of the user.
     """
-    # def __init__():
-        
     email = ""
     password = ""
     first_name = ""
