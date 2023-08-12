@@ -11,7 +11,7 @@ class BaseModel:
     """ Defines the base model class"""
 
     def __init__(self, *args, **kwargs):
-
+        """Initializes the base model class"""
         if kwargs:
             if "__class__" in kwargs:
                 del kwargs["__class__"]
