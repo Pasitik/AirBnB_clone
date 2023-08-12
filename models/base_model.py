@@ -6,12 +6,12 @@ from uuid import uuid4
 from datetime import datetime
 from sys import path
 path.append('.')
-from models import storage
 
 class BaseModel:
     """ Defines the base model class"""
 
     def __init__(self, *args, **kwargs):
+        from models import storage
         if kwargs:
             if "__class__" in kwargs:
                 del kwargs["__class__"]
@@ -29,6 +29,7 @@ class BaseModel:
             storage.new(self)
 
     def save(self):
+        from models import storage
         """Saves an instance to a file """
         self.updated_at = datetime.now()
         storage.new(self)
