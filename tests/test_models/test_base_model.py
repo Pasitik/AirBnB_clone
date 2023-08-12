@@ -98,7 +98,7 @@ class TestBase_save_to_file(unittest.TestCase):
 
         with open('file.json', 'r', encoding='UTF-8') as my_file:
             content = my_file.read()
-            self.assertFalse(len(content) == None)
+            self.assertFalse(len(content) is None)
 
     def test_save_for_two_instances(self):
         """Defines test for the base save method"""
@@ -109,7 +109,7 @@ class TestBase_save_to_file(unittest.TestCase):
         bm2.save()
         with open('file.json', 'r', encoding='UTF-8') as my_file:
             content = my_file.read()
-            self.assertFalse(len(content) == None)
+            self.assertFalse(len(content) is None)
 
     def test_save_to_file_do_not_overwrite(self):
         bm1 = BaseModel()
@@ -142,6 +142,7 @@ class TestBaseModel_to_dict(unittest.TestCase):
     def test_str_format(self):
         """Test if __str__ method produces the correct format/output"""
         obj = BaseModel("12345", "test_value")
-        expected_output = f"[{obj.__class__.__name__}] ({obj.id}) {obj.__dict__}"
+        expected_output = f"[{obj.__class__.__name__}]
+        ({obj.id}) {obj.__dict__}"
         actual_output = str(obj)
         self.assertEqual(actual_output, expected_output)
