@@ -4,14 +4,13 @@
 """
 from uuid import uuid4
 from datetime import datetime
-from sys import path
-path.append('.')
+import models
 
 class BaseModel:
     """ Defines the base model class"""
 
     def __init__(self, *args, **kwargs):
-        from models import storage
+
         if kwargs:
             if "__class__" in kwargs:
                 del kwargs["__class__"]
@@ -26,14 +25,13 @@ class BaseModel:
             self.id = str(uuid4())
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
+            models.storage.new(self)
 
     def save(self):
-        from models import storage
         """Saves an instance to a file """
         self.updated_at = datetime.now()
-        storage.new(self)
-        storage.save()
+        models.storage.new(self)
+        models.storage.save()
 
     def to_dict(self):
         """Resolves an instance to a ditionary """
