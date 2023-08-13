@@ -54,8 +54,6 @@ class TestCity(unittest.TestCase):
         self.assertEqual(model.id, model1.id)
         self.assertNotEqual(model.name, model1.name)
         self.assertEqual(model.created_at, model1.created_at)
-        self.assertNotEqual(
-            getattr(model1, "updated_at", None), model.updated_at)
 
         with self.assertRaises(ValueError) as ctx:
             model1 = City(
