@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""Defines unittests for models/place"""
+
 import unittest
 from datetime import datetime
 from models.place import Place

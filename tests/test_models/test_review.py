@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+"""Defines test for models/review."""
+
 import unittest
 from datetime import datetime
 from models.review import Review
