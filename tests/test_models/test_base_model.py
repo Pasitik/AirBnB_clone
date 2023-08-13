@@ -152,3 +152,7 @@ class TestBaseModel_to_dict(unittest.TestCase):
         )
         actual_output = str(obj)
         self.assertEqual(actual_output, expected_output)
+
+
+if __name__ == "__main__":
+    unittest.main()
