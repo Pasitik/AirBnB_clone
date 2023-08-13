@@ -38,8 +38,12 @@ class TestCity(unittest.TestCase):
         self.assertIsInstance(city_dict, dict)
         self.assertEqual(city_dict["__class__"], "City")
         self.assertEqual(city_dict["id"], city.id)
-        self.assertEqual(city_dict["created_at"], city.created_at.isoformat())
-        self.assertEqual(city_dict["updated_at"], city.updated_at.isoformat())
+        self.assertEqual(
+                city_dict["created_at"], city.created_at.isoformat()
+        )
+        self.assertEqual(
+                city_dict["updated_at"], city.updated_at.isoformat()
+        )
 
     def test_city_str_representation(self):
         """Test City __str__ representation."""
