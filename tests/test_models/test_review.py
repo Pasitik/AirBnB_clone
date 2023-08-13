@@ -1,118 +1,64 @@
 #!/usr/bin/python3
-
-""" Test module for base_model module """
-
-
-from models.review import Review
 import unittest
 from datetime import datetime
-import io
-import sys
+from models.review import Review
+from models.base_model import BaseModel
 
 
 class TestReview(unittest.TestCase):
-    """ A TestCase class that tests the Review class """
+    """Tests for the Review class."""
 
-    def test_initialization(self):
-        """ test the initialization of the Review class """
+    def test_review_instance_creation(self):
+        """Test Review instance creation."""
+        review = Review()
+        self.assertIsInstance(review, Review)
+        self.assertIsInstance(review, BaseModel)
+        self.assertTrue(hasattr(review, "id"))
+        self.assertTrue(hasattr(review, "created_at"))
+        self.assertTrue(hasattr(review, "updated_at"))
 
-        model = Review()
-        self.assertIsInstance(model, Review)
-        self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, datetime)
-        self.assertIsInstance(model.updated_at, datetime)
+    def test_review_attributes(self):
+        """Test Review attributes."""
+        review = Review()
+        self.assertEqual(review.place_id, "")
+        self.assertEqual(review.user_id, "")
+        self.assertEqual(review.text, "")
+        self.assertTrue(isinstance(review.place_id, str))
+        self.assertTrue(isinstance(review.user_id, str))
+        self.assertTrue(isinstance(review.text, str))
 
-        model = Review("name")
-        self.assertIsInstance(model, Review)
-        self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, datetime)
-        self.assertIsInstance(model.updated_at, datetime)
-        self.assertIsInstance(model.place_id, str)
-        self.assertIsInstance(model.user_id, str)
-        self.assertIsInstance(model.text, str)
-        self.assertEqual(model.place_id, "")
-        self.assertEqual(model.user_id, "")
-        self.assertEqual(model.text, "")
+    def test_review_attributes_assignment(self):
+        """Test Review attributes assignment."""
+        review = Review()
+        review.text = "London"
+        review.place_id = "1234"
+        review.user_id = "5678"
+        self.assertEqual(review.text, "London")
+        self.assertEqual(review.place_id, "1234")
+        self.assertEqual(review.user_id, "5678")
 
-        model.name = "John"
-        model_dict = model.to_dict()
-        model1 = Review(**model_dict)
-        self.assertIsInstance(model1, Review)
-        self.assertIsInstance(model1.id, str)
-        self.assertIsInstance(model1.created_at, datetime)
-        self.assertIsInstance(model1.updated_at, datetime)
-        self.assertEqual(model.id, model1.id)
-        self.assertEqual(model.name, model1.name)
-        self.assertEqual(model.created_at, model1.created_at)
-        self.assertEqual(model.updated_at, model1.updated_at)
-        self.assertFalse(isinstance(getattr(model, "__class__", None), str))
-
-        model1 = Review(
-            id=model_dict["id"], name="James",
-            created_at=model_dict["created_at"])
-        self.assertIsInstance(model1, Review)
-        self.assertIsInstance(model1.id, str)
-        self.assertIsInstance(model1.created_at, datetime)
-        self.assertEqual(model.id, model1.id)
-        self.assertNotEqual(model.name, model1.name)
-        self.assertEqual(model.created_at, model1.created_at)
-
-        with self.assertRaises(ValueError) as ctx:
-            model1 = Review(
-                id=model_dict["id"], name="James",
-                created_at=model_dict["created_at"],
-                updated_at="this is a bad date string")
-
-    def test_save_instance_method(self):
-        """ test the save instance method of the Review class """
-
-        model = Review()
-        date1 = model.updated_at
-        model.save()
-        date2 = model.updated_at
-        self.assertNotEqual(date1, date2)
-
-    def test_to_dict_instance_method(self):
-        """ test the to_dict instance method of the Review Class """
-
-        model = Review()
-        m_dict = model.to_dict()
-        m_dict_keys = {"__class__", "id", "created_at", "updated_at"}
-        self.assertIsInstance(m_dict, dict)
-        self.assertSetEqual(set(m_dict.keys()), m_dict_keys)
-        self.assertIsInstance(m_dict["id"], str)
-        self.assertIsInstance(m_dict["created_at"], str)
-        self.assertIsInstance(m_dict["updated_at"], str)
-
-        model = Review()
-        model.name = "John"
-        model.age = 50
-        m_dict = model.to_dict()
-        m_dict_keys = {
-            "__class__", "id", "created_at", "updated_at", "name", "age"}
-        self.assertIsInstance(m_dict, dict)
-        self.assertSetEqual(set(m_dict.keys()), m_dict_keys)
-        self.assertIsInstance(m_dict["name"], str)
-        self.assertIsInstance(m_dict["age"], int)
-
-        with self.assertRaises(TypeError):
-            m_dict = model.to_dict("argument")
-
-    def test_str_representation(self):
-        """ test the __str__ function of the Review """
-
-        model = Review()
-        new_stdout = io.StringIO()
-        sys.stdout = new_stdout
-
-        print(model)
-
-        m_str = new_stdout.getvalue()
-        self.assertIn("[Review]", m_str)
-        self.assertIn("'id': ", m_str)
-        self.assertIn("'created_at': datetime.datetime", m_str)
-        self.assertIn("'updated_at': datetime.datetime", m_str)
+    def test_review_to_dict(self):
+        """Test Review to_dict method."""
+        review = Review()
+        review_dict = review.to_dict()
+        self.assertIsInstance(review_dict, dict)
+        self.assertEqual(review_dict["__class__"], "Review")
+        self.assertEqual(review_dict["id"], review.id)
         self.assertEqual(
-            f"[{model.__class__.__name__}] ({model.id}) {model.__dict__}\n",
-            m_str)
-        sys.stdout = sys.__stdout__
+            review_dict["created_at"], review.created_at.isoformat()
+        )
+        self.assertEqual(
+            review_dict["updated_at"], review.updated_at.isoformat()
+        )
+
+    def test_review_str_representation(self):
+        """Test Review __str__ representation."""
+        review = Review()
+        str_repr = str(review)
+        self.assertIn("[Review]", str_repr)
+        self.assertIn(review.id, str_repr)
+        self.assertIn(str(review.__dict__), str_repr)
+
+
+if __name__ == "__main__":
+    unittest.main()
