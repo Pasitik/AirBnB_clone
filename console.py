@@ -317,10 +317,4 @@ class HBNBCommand(cmd.Cmd):
 
 
 if __name__ == '__main__':
-    import sys
-    if sys.stdin.isatty():
-        HBNBCommand().cmdloop()
-    else:
-        input_data = sys.stdin.read().strip()
-        cmd_instance = HBNBCommand()
-        cmd_instance.onecmd(input_data)
+    HBNBCommand().cmdloop()
