@@ -5,7 +5,7 @@ from models.state import State
 from models.base_model import BaseModel
 
 
-class TestCity(unittest.TestCase):
+class TestState(unittest.TestCase):
     """Tests for the State class."""
 
     def test_state_instance_creation(self):

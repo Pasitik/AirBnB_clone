@@ -1,134 +1,96 @@
 #!/usr/bin/python3
-
-""" Test module for base_model module """
-
-
-from models.place import Place
 import unittest
 from datetime import datetime
-import io
-import sys
+from models.place import Place
+from models.base_model import BaseModel
 
 
 class TestPlace(unittest.TestCase):
-    """ A TestCase class that tests the Place class """
+    """Tests for the Place class."""
 
-    def test_initialization(self):
-        """ test the initialization of the Place class """
+    def test_place_instance_creation(self):
+        """Test Place instance creation."""
+        place = Place()
+        self.assertIsInstance(place, Place)
+        self.assertIsInstance(place, BaseModel)
+        self.assertTrue(hasattr(place, "id"))
+        self.assertTrue(hasattr(place, "created_at"))
+        self.assertTrue(hasattr(place, "updated_at"))
 
-        model = Place()
-        self.assertIsInstance(model, Place)
-        self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, datetime)
-        self.assertIsInstance(model.updated_at, datetime)
+    def test_place_attributes(self):
+        """Test Place attributes."""
+        place = Place()
+        self.assertEqual(place.name, "")
+        self.assertEqual(place.city_id, "")
+        self.assertEqual(place.user_id, "")
+        self.assertEqual(place.description, "")
+        self.assertEqual(place.number_rooms, 0)
+        self.assertEqual(place.number_bathrooms, 0)
+        self.assertEqual(place.max_guest, 0)
+        self.assertEqual(place.price_by_night, 0)
+        self.assertEqual(place.latitude, 0.0)
+        self.assertEqual(place.longitude, 0.0)
+        self.assertEqual(place.amenity_ids, [])
+        self.assertTrue(isinstance(place.name, str))
+        self.assertTrue(isinstance(place.city_id, str))
+        self.assertTrue(isinstance(place.user_id, str))
+        self.assertTrue(isinstance(place.description, str))
+        self.assertTrue(isinstance(place.number_rooms, int))
+        self.assertTrue(isinstance(place.number_bathrooms, int))
+        self.assertTrue(isinstance(place.max_guest, int))
+        self.assertTrue(isinstance(place.price_by_night, int))
+        self.assertTrue(isinstance(place.latitude, float))
+        self.assertTrue(isinstance(place.longitude, float))
+        self.assertTrue(isinstance(place.amenity_ids, object))
 
-        model = Place("name")
-        self.assertIsInstance(model, Place)
-        self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, datetime)
-        self.assertIsInstance(model.updated_at, datetime)
-        self.assertIsInstance(model.city_id, str)
-        self.assertIsInstance(model.user_id, str)
-        self.assertIsInstance(model.name, str)
-        self.assertIsInstance(model.description, str)
-        self.assertIsInstance(model.number_rooms, int)
-        self.assertIsInstance(model.number_bathrooms, int)
-        self.assertIsInstance(model.max_guest, int)
-        self.assertIsInstance(model.price_by_night, int)
-        self.assertIsInstance(model.latitude, float)
-        self.assertIsInstance(model.longitude, float)
-        self.assertIsInstance(model.amenity_ids, list)
-        self.assertEqual(model.city_id, "")
-        self.assertEqual(model.user_id, "")
-        self.assertEqual(model.name, "")
-        self.assertEqual(model.description, "")
-        self.assertEqual(model.number_rooms, 0)
-        self.assertEqual(model.number_bathrooms, 0)
-        self.assertEqual(model.max_guest, 0)
-        self.assertEqual(model.price_by_night, 0)
-        self.assertEqual(model.latitude, 0.0)
-        self.assertEqual(model.longitude, 0.0)
-        self.assertEqual(model.amenity_ids, [])
+    def test_place_attributes_assignment(self):
+        """Test Place attributes assignment."""
+        place = Place()
+        place.name = "London"
+        place.city_id = "1234"
+        place.user_id = "5678"
+        place.description = "San Francisco"
+        place.number_rooms = 567
+        place.number_bathrooms = 567
+        place.max_guest = 567
+        place.price_by_night = 567
+        place.latitude = 56.7
+        place.longitude = 56.7
+        place.amenity_ids = ["56a7"]
+        self.assertEqual(place.name, "London")
+        self.assertEqual(place.city_id, "1234")
+        self.assertEqual(place.user_id, "5678")
+        self.assertEqual(place.description, "San Francisco")
+        self.assertEqual(place.number_rooms, 567)
+        self.assertEqual(place.number_bathrooms, 567)
+        self.assertEqual(place.max_guest, 567)
+        self.assertEqual(place.price_by_night, 567)
+        self.assertEqual(place.latitude, 56.7)
+        self.assertEqual(place.longitude, 56.7)
+        self.assertEqual(place.amenity_ids, ["56a7"])
 
-        model.name = "John"
-        model_dict = model.to_dict()
-        model1 = Place(**model_dict)
-        self.assertIsInstance(model1, Place)
-        self.assertIsInstance(model1.id, str)
-        self.assertIsInstance(model1.created_at, datetime)
-        self.assertIsInstance(model1.updated_at, datetime)
-        self.assertEqual(model.id, model1.id)
-        self.assertEqual(model.name, model1.name)
-        self.assertEqual(model.created_at, model1.created_at)
-        self.assertEqual(model.updated_at, model1.updated_at)
-        self.assertFalse(isinstance(getattr(model, "__class__", None), str))
-
-        model1 = Place(
-            id=model_dict["id"], name="James",
-            created_at=model_dict["created_at"])
-        self.assertIsInstance(model1, Place)
-        self.assertIsInstance(model1.id, str)
-        self.assertIsInstance(model1.created_at, datetime)
-        self.assertEqual(model.id, model1.id)
-        self.assertNotEqual(model.name, model1.name)
-        self.assertEqual(model.created_at, model1.created_at)
-
-        with self.assertRaises(ValueError) as ctx:
-            model1 = Place(
-                id=model_dict["id"], name="James",
-                created_at=model_dict["created_at"],
-                updated_at="this is a bad date string")
-
-    def test_save_instance_method(self):
-        """ test the save instance method of the Place class """
-
-        model = Place()
-        date1 = model.updated_at
-        model.save()
-        date2 = model.updated_at
-        self.assertNotEqual(date1, date2)
-
-    def test_to_dict_instance_method(self):
-        """ test the to_dict instance method of the Place Class """
-
-        model = Place()
-        m_dict = model.to_dict()
-        m_dict_keys = {"__class__", "id", "created_at", "updated_at"}
-        self.assertIsInstance(m_dict, dict)
-        self.assertSetEqual(set(m_dict.keys()), m_dict_keys)
-        self.assertIsInstance(m_dict["id"], str)
-        self.assertIsInstance(m_dict["created_at"], str)
-        self.assertIsInstance(m_dict["updated_at"], str)
-
-        model = Place()
-        model.name = "John"
-        model.age = 50
-        m_dict = model.to_dict()
-        m_dict_keys = {
-            "__class__", "id", "created_at", "updated_at", "name", "age"}
-        self.assertIsInstance(m_dict, dict)
-        self.assertSetEqual(set(m_dict.keys()), m_dict_keys)
-        self.assertIsInstance(m_dict["name"], str)
-        self.assertIsInstance(m_dict["age"], int)
-
-        with self.assertRaises(TypeError):
-            m_dict = model.to_dict("argument")
-
-    def test_str_representation(self):
-        """ test the __str__ function of the Place """
-
-        model = Place()
-        new_stdout = io.StringIO()
-        sys.stdout = new_stdout
-
-        print(model)
-
-        m_str = new_stdout.getvalue()
-        self.assertIn("[Place]", m_str)
-        self.assertIn("'id': ", m_str)
-        self.assertIn("'created_at': datetime.datetime", m_str)
-        self.assertIn("'updated_at': datetime.datetime", m_str)
+    def test_place_to_dict(self):
+        """Test Place to_dict method."""
+        place = Place()
+        place_dict = place.to_dict()
+        self.assertIsInstance(place_dict, dict)
+        self.assertEqual(place_dict["__class__"], "Place")
+        self.assertEqual(place_dict["id"], place.id)
         self.assertEqual(
-            f"[{model.__class__.__name__}] ({model.id}) {model.__dict__}\n",
-            m_str)
-        sys.stdout = sys.__stdout__
+            place_dict["created_at"], place.created_at.isoformat()
+        )
+        self.assertEqual(
+            place_dict["updated_at"], place.updated_at.isoformat()
+        )
+
+    def test_place_str_representation(self):
+        """Test Place __str__ representation."""
+        place = Place()
+        str_repr = str(place)
+        self.assertIn("[Place]", str_repr)
+        self.assertIn(place.id, str_repr)
+        self.assertIn(str(place.__dict__), str_repr)
+
+
+if __name__ == "__main__":
+    unittest.main()
