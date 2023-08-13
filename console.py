@@ -287,7 +287,7 @@ class HBNBCommand(cmd.Cmd):
                 pattern = re.compile(r'^destroy\((.*)\)$', re.IGNORECASE)
                 match = pattern.match(parts[2])
                 if match:
-                    match = pattern.match(parts[1])
+                    match = pattern.match(parts[2])
                     id_value = match.group(1).strip('"')
                     search_string = f"{class_name} {id_value}"
                     self.do_destroy(f"{class_name} {id_value}")
