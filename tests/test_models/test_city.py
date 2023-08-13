@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """Defines unittests for models/city.py."""
 
+import models
 import unittest
 from datetime import datetime
 from models.city import City
