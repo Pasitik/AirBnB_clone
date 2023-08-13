@@ -12,7 +12,6 @@ path.append('.')
 class FileStorage:
     """Defines class for storage engine"""
 
-
     __file_path = "file.json"
     __objects = {}
 
