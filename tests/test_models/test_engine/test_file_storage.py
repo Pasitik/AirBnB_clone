@@ -77,6 +77,17 @@ class TestFileStorage(unittest.TestCase):
         dict_of_obj = FileStorage._FileStorage__objects
         self.assertIn(f"BaseModel." + base_inst.id, dict_of_obj)
 
+    def test_reload_with_empty_objects(self):
+        base = BaseModel()
+        models.storage.new(base)
+        models.storage.save()
+        models.storage._FileStorage__objects = {}
+        models.storage.reload()
+        self.assertEqual(
+            models.storage.all()[f"{BaseModel.__name__}.{base.id}"].to_dict(),
+            base.to_dict()
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
