@@ -220,6 +220,7 @@ class HBNBCommand(cmd.Cmd):
                     else:
                         if attr_value[0] == '\"':
                             attr_value = attr_value.replace('"', '')
+                            setattr(instance, attr_name, attr_value)
                         else:
                             pattern = re.compile(
                                     r'^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$'
@@ -228,8 +229,14 @@ class HBNBCommand(cmd.Cmd):
                             if match:
                                 attr_value = float(attr_value)
                             else:
-                                attr_value = int(attr_value)
-                        setattr(instance, attr_name, attr_value)
+                                pattern = re.compile(r'^[0-9]*$')
+                                match = re.match(pattern, attr_value)
+                                if match:
+                                    print(attr_value)
+                                    attr_value = int(attr_value)
+                                else:
+                                    attr_value = str(attr_value)
+                            setattr(instance, attr_name, attr_value)
                     print(instance)
                     instance.save()
 
