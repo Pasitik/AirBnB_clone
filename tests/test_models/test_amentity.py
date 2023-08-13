@@ -33,7 +33,7 @@ class TestAmenityInstantiation(unittest.TestCase):
         """test if id is a string"""
         amenity = Amenity()
         self.assertIsInstance(amenity.id, str)
-    
+
     def test_created_at_is_datetime(self):
         """test created at is datetime"""
         amenity = Amenity()
@@ -268,6 +268,25 @@ class Test_Amenity(unittest.TestCase):
         self.assertIn("[Amenity]", str_repr)
         self.assertIn(amenity.id, str_repr)
         self.assertIn(str(amenity.__dict__), str_repr)
+
+
+class TestAmenityPlus(unittest.TestCase):
+    """ This class test the ``Amenity`` class"""
+
+    def test_attribute_name(self):
+        """Test the attribute name"""
+        amenity = Amenity()
+        self.assertTrue(hasattr(amenity, "name"))
+        self.assertEqual(amenity.name, "")
+        self.assertTrue(type(amenity.name) == str)
+
+    def test_class_doc(self):
+        """ Check for the class documentaion"""
+        self.assertIsNotNone(Amenity.__doc__)
+
+    def test_module_doc(self):
+        """ Check for the module documentation"""
+        self.assertIsNotNone(models.amenity.__doc__)
 
 
 if __name__ == "__main__":
