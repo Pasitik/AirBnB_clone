@@ -76,7 +76,7 @@ class TestBaseClass(unittest.TestCase):
         docstring = bm.save.__doc__
         self.assertIsNotNone(docstring, msg="Documentation is missing")
         self.assertNotEqual(
-            docstring.strip(), 
+            docstring.strip(),
             "",
             msg="Documentation is empty or consistsof only whitespace"
         )
