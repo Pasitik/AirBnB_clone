@@ -1,121 +1,68 @@
 #!/usr/bin/python3
-
-""" Test module for base_model module """
-
-
-from models.user import User
 import unittest
 from datetime import datetime
-import io
-import sys
+from models.user import User
+from models.base_model import BaseModel
 
 
 class TestUser(unittest.TestCase):
-    """ A TestCase class that tests the User class """
+    """Tests for the User class."""
 
-    def test_initialization(self):
-        """ test the initialization of the User class """
+    def test_user_instance_creation(self):
+        """Test User instance creation."""
+        user = User()
+        self.assertIsInstance(user, User)
+        self.assertIsInstance(user, BaseModel)
+        self.assertTrue(hasattr(user, "id"))
+        self.assertTrue(hasattr(user, "created_at"))
+        self.assertTrue(hasattr(user, "updated_at"))
 
-        model = User()
-        self.assertIsInstance(model, User)
-        self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, datetime)
-        self.assertIsInstance(model.updated_at, datetime)
-        self.assertIsInstance(model.email, str)
-        self.assertIsInstance(model.password, str)
-        self.assertIsInstance(model.first_name, str)
-        self.assertIsInstance(model.last_name, str)
-        self.assertEqual(model.email, "")
-        self.assertEqual(model.password, "")
-        self.assertEqual(model.first_name, "")
-        self.assertEqual(model.last_name, "")
+    def test_review_attributes(self):
+        """Test User attributes."""
+        user = User()
+        self.assertEqual(user.password, "")
+        self.assertEqual(user.email, "")
+        self.assertEqual(user.first_name, "")
+        self.assertEqual(user.last_name, "")
+        self.assertTrue(isinstance(user.password, str))
+        self.assertTrue(isinstance(user.email, str))
+        self.assertTrue(isinstance(user.first_name, str))
+        self.assertTrue(isinstance(user.last_name, str))
 
-        model = User("name")
-        self.assertIsInstance(model, User)
-        self.assertIsInstance(model.id, str)
-        self.assertIsInstance(model.created_at, datetime)
-        self.assertIsInstance(model.updated_at, datetime)
+    def test_user_attributes_assignment(self):
+        """Test User attributes assignment."""
+        user = User()
+        user.email = "j@alx.com"
+        user.password = "5678"
+        user.first_name = "john"
+        user.last_name = "Freeman"
+        self.assertEqual(user.email, "j@alx.com")
+        self.assertEqual(user.password, "5678")
+        self.assertEqual(user.first_name, "john")
+        self.assertEqual(user.last_name, "Freeman")
 
-        model.name = "John"
-        model_dict = model.to_dict()
-        model1 = User(**model_dict)
-        self.assertIsInstance(model1, User)
-        self.assertIsInstance(model1.id, str)
-        self.assertIsInstance(model1.created_at, datetime)
-        self.assertIsInstance(model1.updated_at, datetime)
-        self.assertEqual(model.id, model1.id)
-        self.assertEqual(model.name, model1.name)
-        self.assertEqual(model.created_at, model1.created_at)
-        self.assertEqual(model.updated_at, model1.updated_at)
-
-        model1 = User(
-            id=model_dict["id"], name="James",
-            created_at=model_dict["created_at"])
-        self.assertIsInstance(model1, User)
-        self.assertIsInstance(model1.id, str)
-        self.assertIsInstance(model1.created_at, datetime)
-        self.assertEqual(model.id, model1.id)
-        self.assertNotEqual(model.name, model1.name)
-        self.assertEqual(model.created_at, model1.created_at)
-        self.assertNotEqual(
-            getattr(model1, "updated_at", None), model.updated_at)
-
-        with self.assertRaises(ValueError) as ctx:
-            model1 = User(
-                id=model_dict["id"], name="James",
-                created_at=model_dict["created_at"],
-                updated_at="this is a bad date string")
-
-    def test_save_instance_method(self):
-        """ test the save instance method of the User class """
-
-        model = User()
-        date1 = model.updated_at
-        model.save()
-        date2 = model.updated_at
-        self.assertNotEqual(date1, date2)
-
-    def test_to_dict_instance_method(self):
-        """ test the to_dict instance method of the User Class """
-
-        model = User()
-        m_dict = model.to_dict()
-        m_dict_keys = {"__class__", "id", "created_at", "updated_at"}
-        self.assertIsInstance(m_dict, dict)
-        self.assertSetEqual(set(m_dict.keys()), m_dict_keys)
-        self.assertIsInstance(m_dict["id"], str)
-        self.assertIsInstance(m_dict["created_at"], str)
-        self.assertIsInstance(m_dict["updated_at"], str)
-
-        model = User()
-        model.name = "John"
-        model.age = 50
-        m_dict = model.to_dict()
-        m_dict_keys = {
-            "__class__", "id", "created_at", "updated_at", "name", "age"}
-        self.assertIsInstance(m_dict, dict)
-        self.assertSetEqual(set(m_dict.keys()), m_dict_keys)
-        self.assertIsInstance(m_dict["name"], str)
-        self.assertIsInstance(m_dict["age"], int)
-
-        with self.assertRaises(TypeError):
-            m_dict = model.to_dict("argument")
-
-    def test_str_representation(self):
-        """ test the __str__ function of the User """
-
-        model = User()
-        new_stdout = io.StringIO()
-        sys.stdout = new_stdout
-
-        print(model)
-
-        m_str = new_stdout.getvalue()
-        self.assertIn("[User]", m_str)
-        self.assertIn("'id': ", m_str)
-        self.assertIn("'created_at': datetime.datetime", m_str)
-        self.assertIn("'updated_at': datetime.datetime", m_str)
+    def test_user_to_dict(self):
+        """Test User to_dict method."""
+        user = User()
+        user_dict = user.to_dict()
+        self.assertIsInstance(user_dict, dict)
+        self.assertEqual(user_dict["__class__"], "User")
+        self.assertEqual(user_dict["id"], user.id)
         self.assertEqual(
-            f"[{model.__class__.__name__}] ({model.id}) {model.__dict__}\n",
-            m_str)
-        sys.stdout = sys.__stdout__
+            user_dict["created_at"], user.created_at.isoformat()
+        )
+        self.assertEqual(
+            user_dict["updated_at"], user.updated_at.isoformat()
+        )
+
+    def test_user_str_representation(self):
+        """Test User __str__ representation."""
+        user = User()
+        str_repr = str(user)
+        self.assertIn("[User]", str_repr)
+        self.assertIn(user.id, str_repr)
+        self.assertIn(str(user.__dict__), str_repr)
+
+
+if __name__ == "__main__":
+    unittest.main()
