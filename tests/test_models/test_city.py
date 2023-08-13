@@ -2,6 +2,7 @@
 import unittest
 from datetime import datetime
 from models.city import City
+from models.base_model import BaseModel
 
 
 class TestCity(unittest.TestCase):
@@ -46,7 +47,7 @@ class TestCity(unittest.TestCase):
         str_repr = str(city)
         self.assertIn("[City]", str_repr)
         self.assertIn(city.id, str_repr)
-        self.assertIn(city.__dict__, str_repr)
+        self.assertIn(str(city.__dict__), str_repr)
 
 
 if __name__ == "__main__":
