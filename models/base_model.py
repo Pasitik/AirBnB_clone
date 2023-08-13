@@ -47,5 +47,5 @@ class BaseModel:
         return dictionary
 
     def __str__(self):
-
+        """Defines a string representation of an instance"""
         return f"[{self.__class__.__name__}] ({self.id}) {self.__dict__}"
