@@ -33,7 +33,7 @@ class TestAmenityInstantiation(unittest.TestCase):
         """test if id is a string"""
         amenity = Amenity()
         self.assertIsInstance(amenity.id, str)
-
+    
     def test_created_at_is_datetime(self):
         """test created at is datetime"""
         amenity = Amenity()
@@ -239,6 +239,7 @@ class Test_Amenity(unittest.TestCase):
         amenity = Amenity()
         self.assertEqual(amenity.name, "")
         self.assertTrue(isinstance(amenity.name, str))
+        self.assertTrue(type(amenity.name) is str)
 
     def test_amenity_attributes_assignment(self):
         """Test amenity attributes assignment."""
