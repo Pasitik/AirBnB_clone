@@ -75,9 +75,11 @@ class TestBaseClass(unittest.TestCase):
         bm = BaseModel()
         docstring = bm.save.__doc__
         self.assertIsNotNone(docstring, msg="Documentation is missing")
-        self.assertNotEqual(docstring.strip(), "",
-                            msg="Documentation is empty or consists
-                            of only whitespace")
+        self.assertNotEqual(
+            docstring.strip(), 
+            "",
+            msg="Documentation is empty or consistsof only whitespace"
+        )
 
 
 class TestBase_save_to_file(unittest.TestCase):
@@ -131,8 +133,10 @@ class TestBaseModel_to_dict(unittest.TestCase):
         bm = BaseModel()
         docstring = bm.to_dict.__doc__
         self.assertIsNotNone(docstring, msg="Documentation is missing")
-        self.assertNotEqual(docstring.strip(), "", msg="Documentation
-                            is empty or consists of only whitespace")
+        self.assertNotEqual(
+            docstring.strip(),
+            "", msg="Documentation is empty or consists of only whitespace"
+        )
 
     def test_dict_remains_unchanged_with_args_provided(self):
         """  check that __dict__ remains unchanged with args provided"""
@@ -142,7 +146,9 @@ class TestBaseModel_to_dict(unittest.TestCase):
     def test_str_format(self):
         """Test if __str__ method produces the correct format/output"""
         obj = BaseModel("12345", "test_value")
-        expected_output = f"[{obj.__class__.__name__}]
-        ({obj.id}) {obj.__dict__}"
+        expected_output = (
+            f"[{obj.__class__.__name__}] "
+            f"({obj.id}) {obj.__dict__}"
+        )
         actual_output = str(obj)
         self.assertEqual(actual_output, expected_output)

@@ -11,6 +11,7 @@ JSON file and deserializes JSON file to instances
 
 
 class FileStorage:
+    """Defines class for storage engine"""
     def __init__(self):
         """Initializes the file storage class"""
         self.__file_path = "file.json"
