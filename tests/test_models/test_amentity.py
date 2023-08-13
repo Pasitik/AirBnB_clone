@@ -13,6 +13,7 @@ import unittest
 from datetime import datetime
 from time import sleep
 from models.amenity import Amenity
+from models.base_model import BaseModel
 
 
 class TestAmenityInstantiation(unittest.TestCase):
@@ -219,6 +220,53 @@ class TestAmenityToDict(unittest.TestCase):
         amenity = Amenity()
         with self.assertRaises(TypeError):
             amenity.to_dict(None)
+
+
+class Test_Amenity(unittest.TestCase):
+    """Tests for the User class."""
+
+    def test_amenity_instance_creation(self):
+        """Test amenity instance creation."""
+        amenity = Amenity()
+        self.assertIsInstance(amenity, Amenity)
+        self.assertIsInstance(amenity, BaseModel)
+        self.assertTrue(hasattr(amenity, "id"))
+        self.assertTrue(hasattr(amenity, "created_at"))
+        self.assertTrue(hasattr(amenity, "updated_at"))
+
+    def test_review_attributes(self):
+        """Test amenity attributes."""
+        amenity = Amenity()
+        self.assertEqual(amenity.name, "")
+        self.assertTrue(isinstance(amenity.name, str))
+
+    def test_amenity_attributes_assignment(self):
+        """Test amenity attributes assignment."""
+        amenity = Amenity()
+        amenity.name = "London"
+        self.assertEqual(amenity.name, "London")
+
+    def test_amenity_to_dict(self):
+        """Test amenity to_dict method."""
+        amenity = Amenity()
+        amenity_dict = amenity.to_dict()
+        self.assertIsInstance(amenity_dict, dict)
+        self.assertEqual(amenity_dict["__class__"], "Amenity")
+        self.assertEqual(amenity_dict["id"], amenity.id)
+        self.assertEqual(
+            amenity_dict["created_at"], amenity.created_at.isoformat()
+        )
+        self.assertEqual(
+            amenity_dict["updated_at"], amenity.updated_at.isoformat()
+        )
+
+    def test_amenity_str_representation(self):
+        """Test amenity __str__ representation."""
+        amenity = Amenity()
+        str_repr = str(amenity)
+        self.assertIn("[Amenity]", str_repr)
+        self.assertIn(amenity.id, str_repr)
+        self.assertIn(str(amenity.__dict__), str_repr)
 
 
 if __name__ == "__main__":
